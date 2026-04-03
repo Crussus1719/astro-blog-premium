@@ -4,7 +4,7 @@ import sitemap from '@astrojs/sitemap';
 
 // https://astro.build/config
 export default defineConfig({
-  site: 'https://premium-blog.netlify.app',
+  site: 'https://to2343.netlify.app',
   integrations: [
     tailwind({
       applyBaseStyles: false,
