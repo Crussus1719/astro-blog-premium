@@ -86,12 +86,16 @@ import { Github, Search, Menu, X, Sun, Moon } from 'lucide-astro';
 						<li><a href="/legal" class="hover:text-brand-primary">Legal</a></li>
 					</ul>
 				</div>
-				<div>
+				<div class="relative min-h-[80px]">
 					<h4 class="font-bold text-white mb-4 uppercase text-sm tracking-widest">Newsletter</h4>
-					<form name="newsletter" method="POST" data-netlify="true" class="flex gap-2">
+					<form id="newsletter-form" name="newsletter" method="POST" data-netlify="true" class="flex gap-2 transition-all duration-500">
 						<input type="email" name="email" required placeholder="Seu email..." class="bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-sm focus:outline-none focus:border-brand-primary transition-all w-full" />
 						<button type="submit" class="bg-brand-primary text-white font-bold py-2 px-4 rounded-lg hover:scale-105 active:scale-95 transition-all text-sm shrink-0">Inscrever</button>
 					</form>
+					<div id="newsletter-success" class="hidden absolute top-10 left-0 text-brand-primary font-bold text-sm items-center gap-2 animate-pulse">
+						<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+						Enviado com sucesso! 🎉
+					</div>
 				</div>
 			</div>
 			<div class="max-w-7xl mx-auto mt-12 pt-8 border-t border-white/5 text-center text-xs text-slate-500">
@@ -100,8 +104,34 @@ import { Github, Search, Menu, X, Sun, Moon } from 'lucide-astro';
 		</footer>
 
 		<script is:inline>
-			// Basic Dark Mode Logic if desired, currently static dark for premium feel
+			// Dark mode
 			document.documentElement.classList.add('dark');
+
+			// Newsletter AJAX submission
+			const form = document.querySelector('#newsletter-form');
+			const successMsg = document.querySelector('#newsletter-success');
+
+			if (form) {
+				form.addEventListener('submit', (e) => {
+					e.preventDefault();
+					const formData = new FormData(form);
+					
+					fetch('/', {
+						method: 'POST',
+						headers: { "Content-Type": "application/x-www-form-urlencoded" },
+						body: new URLSearchParams(formData).toString()
+					})
+					.then(() => {
+						form.classList.add('opacity-0', 'pointer-events-none');
+						setTimeout(() => {
+							form.style.display = 'none';
+							successMsg.classList.remove('hidden');
+							successMsg.classList.add('flex');
+						}, 300);
+					})
+					.catch((error) => console.error('Erro na inscrição:', error));
+				});
+			}
 		</script>
 	</body>
 </html>
