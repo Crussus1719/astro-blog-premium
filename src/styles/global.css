@@ -1,15 +1,16 @@
-@import "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-@theme {
+:root {
   --font-primary: "Inter", "Roboto", ui-sans-serif, system-ui;
   --font-serif: "Playfair Display", serif;
 
-  --color-brand-primary: #6366f1; /* Indigo 500 */
-  --color-brand-secondary: #ec4899; /* Pink 500 */
-  --color-surface: #0f172a; /* Slate 900 */
-  --color-surface-soft: #1e293b; /* Slate 800 */
+  --color-brand-primary: #6366f1;
+  --color-brand-secondary: #ec4899;
+  --color-surface: #0f172a;
+  --color-surface-soft: #1e293b;
   --color-surface-glass: rgba(15, 23, 42, 0.7);
-
   --radius-glass: 1.5rem;
 }
 
@@ -24,15 +25,18 @@
   }
 
   h1, h2, h3, h4, h5, h6 {
-    @apply font-serif font-bold text-white tracking-tight;
+    font-family: var(--font-serif);
+    @apply font-bold text-white tracking-tight;
   }
 
   .glass-effect {
-    @apply bg-surface-glass backdrop-blur-xl border border-white/10 shadow-2xl;
+    @apply backdrop-blur-xl border border-white/10 shadow-2xl;
+    background-color: var(--color-surface-glass);
+    border-radius: var(--radius-glass);
   }
 
   .premium-gradient {
-    @apply bg-gradient-to-br from-brand-primary/20 via-brand-secondary/10 to-transparent;
+    @apply bg-gradient-to-br from-[#6366f11a] via-[#ec48990d] to-transparent;
   }
 
   .animated-glow {
