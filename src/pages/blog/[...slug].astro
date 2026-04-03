@@ -1,0 +1,92 @@
+---
+import { type CollectionEntry, getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import Giscus from '../../components/Giscus.astro';
+import { Calendar, Clock, User, ChevronLeft } from 'lucide-astro';
+
+export async function getStaticPaths() {
+	const posts = await getCollection('blog');
+	return posts.map((post) => ({
+		params: { slug: post.slug },
+		props: post,
+	}));
+}
+type Props = CollectionEntry<'blog'>;
+
+const post = Astro.props;
+const { Content } = await post.render();
+---
+
+<Layout title={post.data.title} description={post.data.description} image={post.data.heroImage}>
+	<div class="max-w-4xl mx-auto transition-all animate-in fade-in slide-in-from-bottom-10 duration-700">
+		<a href="/blog" class="inline-flex items-center space-x-2 text-slate-400 hover:text-brand-primary font-bold text-sm mb-10 group">
+			<ChevronLeft size={16} class="transition-transform group-hover:-translate-x-1" />
+			<span>Voltar ao Blog</span>
+		</a>
+
+		<article class="prose prose-invert prose-brand-primary max-w-none" data-pagefind-body>
+			<div class="mb-10">
+				<div class="flex items-center space-x-4 text-brand-secondary font-black uppercase tracking-[0.3em] text-[10px] mb-4">
+					<span>{post.data.category}</span>
+					{post.data.updatedDate && (
+						<span class="text-slate-600 bg-white/5 px-2 py-0.5 rounded italic lowercase tracking-normal font-normal">
+							Editado recentemente
+						</span>
+					)}
+				</div>
+				<h1 class="text-4xl md:text-6xl font-black italic mb-8 leading-[1.1] tracking-tight">{post.data.title}</h1>
+				
+				<div class="flex flex-wrap items-center gap-6 text-slate-400 text-sm font-semibold py-6 border-y border-white/5">
+					<div class="flex items-center space-x-2">
+						<User size={16} />
+						<span>Admin</span>
+					</div>
+					<div class="flex items-center space-x-2">
+						<Calendar size={16} />
+						<span>{post.data.pubDate.toLocaleDateString('pt-BR', { dateStyle: 'long' })}</span>
+					</div>
+					<div class="flex items-center space-x-2">
+						<Clock size={16} />
+						<span>8 min de leitura</span>
+					</div>
+				</div>
+			</div>
+
+			{post.data.heroImage && (
+				<div class="mb-16 aspect-video rounded-[3rem] overflow-hidden border border-white/10 shadow-2xl relative">
+					<img src={post.data.heroImage} alt="" class="w-full h-full object-cover" />
+					<div class="absolute inset-0 bg-gradient-to-t from-slate-950/40 to-transparent"></div>
+				</div>
+			)}
+
+			<div class="prose-content">
+				<Content />
+			</div>
+
+			<div class="mt-16 flex flex-wrap gap-2 py-8 border-t border-white/5">
+				{post.data.tags.map(tag => (
+					<span class="glass-effect px-4 py-1.5 rounded-full text-xs font-bold hover:border-brand-primary/40 transition-colors cursor-pointer">
+						#{tag}
+					</span>
+				))}
+			</div>
+		</article>
+
+		<Giscus />
+	</div>
+</Layout>
+
+<style is:global>
+	.prose-content {
+		@apply text-slate-300 leading-[1.8] text-lg font-medium;
+	}
+	.prose-content h2 { @apply text-3xl font-serif mt-12 mb-6 italic; }
+	.prose-content h3 { @apply text-2xl font-serif mt-10 mb-4; }
+	.prose-content p { @apply my-6; }
+	.prose-content a { @apply text-brand-primary hover:text-brand-secondary transition-colors underline decoration-2 underline-offset-4 font-bold; }
+	.prose-content ul, .prose-content ol { @apply my-8 pl-6 space-y-4 list-outside; }
+	.prose-content li { @apply pl-2; }
+	.prose-content blockquote { @apply border-l-8 border-brand-primary/50 bg-brand-primary/5 pl-10 pr-6 py-8 rounded-2xl italic font-serif text-2xl text-white/90 my-10; }
+	.prose-content code { @apply bg-white/5 px-2 py-0.5 rounded-md font-mono text-sm text-brand-secondary; }
+	.prose-content pre { @apply bg-slate-900 border border-white/10 p-8 rounded-[2rem] my-10 overflow-x-auto shadow-2xl; }
+</style>

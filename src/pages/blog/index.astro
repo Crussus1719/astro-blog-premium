@@ -1,0 +1,57 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+import { Clock, ArrowRight } from 'lucide-astro';
+
+const posts = (await getCollection('blog')).sort(
+	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+---
+
+<Layout title="Todos os Artigos">
+	<div class="py-12">
+		<header class="mb-16 text-center max-w-2xl mx-auto">
+			<span class="text-brand-primary font-black uppercase tracking-[0.4em] text-xs mb-4 block">Arquivo Completo</span>
+			<h1 class="text-5xl md:text-7xl font-serif mb-6 italic">Artigos & <br/> Reflexões</h1>
+			<p class="text-slate-400 font-medium">Mergulhe em nossa coleção completa de guias técnicos, design systems e futuro digital.</p>
+		</header>
+
+		<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+			{posts.map((post) => (
+				<a href={`/blog/${post.slug}`} class="group group-hover:scale-[1.02] transition-transform duration-300">
+					<article class="glass-effect rounded-[2.5rem] overflow-hidden border border-white/5 hover:border-brand-primary/30 transition-all flex flex-col h-full shadow-xl">
+						<div class="aspect-[16/10] overflow-hidden">
+							<img 
+								src={post.data.heroImage} 
+								alt="" 
+								class="w-full h-full object-cover grayscale-[30%] group-hover:grayscale-0 group-hover:scale-110 transition-all duration-700" 
+							/>
+						</div>
+						<div class="p-10 flex flex-col flex-grow">
+							<div class="flex items-center space-x-3 text-[10px] font-black uppercase tracking-widest text-brand-secondary mb-4 opacity-80">
+								<span>{post.data.category}</span>
+								<span class="w-1 h-1 bg-slate-700 rounded-full"></span>
+								<span class="text-slate-500 font-bold">{post.data.pubDate.toLocaleDateString('pt-BR', { year: 'numeric' })}</span>
+							</div>
+							<h2 class="text-2xl font-serif font-bold mb-4 leading-tight group-hover:text-brand-primary transition-colors italic">
+								{post.data.title}
+							</h2>
+							<p class="text-slate-400 text-sm line-clamp-2 leading-relaxed mb-8">
+								{post.data.description}
+							</p>
+							<div class="mt-auto flex items-center justify-between pt-6 border-t border-white/5 opacity-60 group-hover:opacity-100 transition-opacity">
+								<div class="flex items-center space-x-2 text-xs font-bold">
+									<Clock size={14} />
+									<span>8 min read</span>
+								</div>
+								<div class="w-10 h-10 rounded-full glass-effect flex items-center justify-center group-hover:bg-brand-primary group-hover:text-white transition-all">
+									<ArrowRight size={18} />
+								</div>
+							</div>
+						</div>
+					</article>
+				</a>
+			))}
+		</div>
+	</div>
+</Layout>

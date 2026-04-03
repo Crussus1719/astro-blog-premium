@@ -1,0 +1,55 @@
+---
+/* 
+  Pagefind UI Component 
+  Requires building the site first: npm run build
+*/
+---
+<link href="/_pagefind/pagefind-ui.css" rel="stylesheet">
+<script src="/_pagefind/pagefind-ui.js" is:inline></script>
+
+<div id="search" class="glass-effect p-10 rounded-[3rem] w-full max-w-4xl mx-auto border border-white/10 shadow-2xl scale-in-center"></div>
+
+<script is:inline>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    new PagefindUI({ 
+        element: "#search", 
+        showSubResults: true,
+        translations: {
+            placeholder: "Pesquisar artigos...",
+            clear_search: "Limpar",
+            load_more: "Carregar mais",
+            search_label: "Pesquisa interna",
+            filters_label: "Filtros",
+            zero_results: "Nenhum resultado encontrado para [SEARCH_TERM]",
+            many_results: "[COUNT] resultados para [SEARCH_TERM]",
+            one_result: "[COUNT] resultado para [SEARCH_TERM]",
+            alt_search: "Nenhum resultado encontrado para [SEARCH_TERM]. Tentando resultados para [DIFFERENT_TERM]",
+            search_suggestion: "Você quis dizer [SUGGESTION]?",
+            searching: "Pesquisando..."
+        }
+    });
+  });
+</script>
+
+<style is:global>
+  /* Customizing Pagefind UI to match premium theme */
+  :root {
+    --pagefind-ui-primary: #6366f1;
+    --pagefind-ui-text: #e2e8f0;
+    --pagefind-ui-background: transparent;
+    --pagefind-ui-border: rgba(255, 255, 255, 0.1);
+    --pagefind-ui-tag: #6366f1;
+  }
+
+  .pagefind-ui__search-input {
+    @apply bg-white/5 border-white/10 rounded-[1.5rem] py-5 px-8 text-xl font-medium focus:ring-4 focus:ring-brand-primary/20 transition-all !important;
+  }
+
+  .pagefind-ui__result-title {
+    @apply font-serif text-2xl font-bold italic text-white hover:text-brand-primary transition-colors !important;
+  }
+
+  .pagefind-ui__result-excerpt {
+    @apply text-slate-400 mt-2 line-clamp-2 !important;
+  }
+</style>

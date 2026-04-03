@@ -1,0 +1,23 @@
+backend:
+  name: git-gateway
+  branch: main # Branch to update (optional; defaults to master)
+
+local_backend: true # For local testing
+
+media_folder: "public/uploads" # Media files will be stored in the repo under public/uploads
+public_folder: "/uploads" # The src attribute for uploaded media will begin with /uploads
+
+collections:
+  - name: "blog" # Used in routes, e.g., /admin/collections/blog
+    label: "Postagens do Blog" # Used in the UI
+    folder: "src/content/blog" # The path to the folder where the documents are stored
+    create: true # Allow users to create new documents in this collection
+    slug: "{{slug}}" # Filename template, e.g., my-new-blog-post.md
+    fields: # The fields for each document, usually in front matter
+      - {label: "Título", name: "title", widget: "string", hint: "Máx 60 caracteres (recomendado para SEO)"}
+      - {label: "Descrição Curta", name: "description", widget: "text", hint: "Máx 160 caracteres (recomendado para SEO)"}
+      - {label: "Data de Publicação", name: "pubDate", widget: "datetime"}
+      - {label: "Imagem de Capa", name: "heroImage", widget: "image", required: false, default: "/blog-placeholder-1.jpg"}
+      - {label: "Categoria", name: "category", widget: "string", default: "Tecnologia"}
+      - {label: "Tags", name: "tags", widget: "list"}
+      - {label: "Conteúdo", name: "body", widget: "markdown"}

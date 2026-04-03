@@ -1,0 +1,15 @@
+---
+import Layout from '../layouts/Layout.astro';
+import SearchComponent from '../components/Search.astro';
+---
+
+<Layout title="Buscar Conteúdo">
+	<div class="py-20 flex flex-col items-center">
+		<header class="text-center mb-16 max-w-xl mx-auto">
+			<h1 class="text-5xl md:text-7xl font-serif mb-6 italic">O Que Você <br/> Procura?</h1>
+			<p class="text-slate-400 font-medium">Explore nossa biblioteca completa de artigos usando o motor de busca Pagefind integrado.</p>
+		</header>
+		
+		<SearchComponent />
+	</div>
+</Layout>
