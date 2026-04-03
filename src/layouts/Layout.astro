@@ -32,6 +32,9 @@ import { Github, Search, Menu, X, Sun, Moon } from 'lucide-astro';
 		<meta property="og:description" content={description} />
 		<meta property="og:image" content={image} />
 		<meta name="twitter:card" content="summary_large_image" />
+
+		<!-- Netlify Identity Widget -->
+		<script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 	</head>
 	<body class="flex flex-col min-h-screen">
 		<!-- Header / Navigation -->
@@ -76,7 +79,7 @@ import { Github, Search, Menu, X, Sun, Moon } from 'lucide-astro';
 			<div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-10 opacity-75">
 				<div>
 					<div class="font-serif text-2xl font-black italic mb-4">AstroBlog</div>
-					<p class="text-sm leading-relaxed text-slate-400">Transformando ideias em código, design em experiência. Um blog premium totalmente open-source.</p>
+					<p class="text-sm leading-relaxed text-slate-400">Transformando ideias em código, design em experiéncia. Um blog premium totalmente open-source.</p>
 				</div>
 				<div>
 					<h4 class="font-bold text-white mb-4 uppercase text-sm tracking-widest">Links Rápidos</h4>
@@ -132,6 +135,17 @@ import { Github, Search, Menu, X, Sun, Moon } from 'lucide-astro';
 						}, 300);
 					})
 					.catch((error) => console.error('Erro na inscrição:', error));
+				});
+			}
+
+			// Netlify Identity Login Redirect
+			if (window.netlifyIdentity) {
+				window.netlifyIdentity.on("init", user => {
+					if (!user) {
+						window.netlifyIdentity.on("login", () => {
+							document.location.href = "/admin/";
+						});
+					}
 				});
 			}
 		</script>
