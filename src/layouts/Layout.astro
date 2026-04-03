@@ -88,10 +88,10 @@ import { Github, Search, Menu, X, Sun, Moon } from 'lucide-astro';
 				</div>
 				<div>
 					<h4 class="font-bold text-white mb-4 uppercase text-sm tracking-widest">Newsletter</h4>
-					<div class="flex gap-2">
-						<input type="email" placeholder="Seu email..." class="bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-sm focus:outline-none focus:border-brand-primary transition-all w-full" />
-						<button class="bg-brand-primary text-white font-bold py-2 px-4 rounded-lg hover:scale-105 active:scale-95 transition-all text-sm shrink-0">Inscrever</button>
-					</div>
+					<form name="newsletter" method="POST" data-netlify="true" class="flex gap-2">
+						<input type="email" name="email" required placeholder="Seu email..." class="bg-white/5 border border-white/10 rounded-lg px-4 py-2 text-sm focus:outline-none focus:border-brand-primary transition-all w-full" />
+						<button type="submit" class="bg-brand-primary text-white font-bold py-2 px-4 rounded-lg hover:scale-105 active:scale-95 transition-all text-sm shrink-0">Inscrever</button>
+					</form>
 				</div>
 			</div>
 			<div class="max-w-7xl mx-auto mt-12 pt-8 border-t border-white/5 text-center text-xs text-slate-500">
