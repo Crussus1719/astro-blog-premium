@@ -21,10 +21,26 @@ import { Github, Search, Menu, X, Sun, Moon } from 'lucide-astro';
 		<meta name="generator" content={Astro.generator} />
 		<title>{title} | Astro Blog Premium</title>
 
-		<!-- Preload and Google Fonts -->
+		<!-- Preconnect and DNS Prefetch -->
 		<link rel="preconnect" href="https://fonts.googleapis.com">
 		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-		<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+		<link rel="dns-prefetch" href="https://fonts.googleapis.com">
+
+		<!-- Non-blocking Google Fonts loading -->
+		<link 
+			rel="preload" 
+			as="style" 
+			href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Playfair+Display:ital,wght@0,700;1,700&display=swap"
+		/>
+		<link 
+			rel="stylesheet" 
+			href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" 
+			media="print" 
+			onload="this.media='all'"
+		/>
+		<noscript>
+			<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet" />
+		</noscript>
 
 		<!-- Open Graph / Social Meta -->
 		<meta property="og:type" content="website" />

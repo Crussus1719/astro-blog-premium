@@ -11,6 +11,9 @@ export default defineConfig({
     }),
     sitemap(),
   ],
+  build: {
+    inlineStylesheets: 'always',
+  },
   markdown: {
     shikiConfig: {
       theme: 'dracula',
