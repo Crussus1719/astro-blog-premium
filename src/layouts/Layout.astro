@@ -132,26 +132,30 @@ import { ViewTransitions } from 'astro:transitions';
 			</div>
 		</footer>
 
-		<script is:inline>
-			function setupLayout() {
-				// Theme Toggle Logic
-				const themeToggle = document.querySelector('#theme-toggle');
+		<script>
+			// Helper to check for theme
+			const updateTheme = () => {
 				const html = document.documentElement;
-				
-				// Initialize theme
 				const storedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
 				html.classList.toggle('dark', storedTheme === 'dark');
+			};
 
+			// Initialize theme on every page load
+			document.addEventListener('astro:page-load', () => {
+				updateTheme();
+
+				// Theme Toggle Logic
+				const themeToggle = document.querySelector('#theme-toggle');
 				if (themeToggle) {
 					themeToggle.addEventListener('click', () => {
-						const isDark = html.classList.toggle('dark');
+						const isDark = document.documentElement.classList.toggle('dark');
 						localStorage.setItem('theme', isDark ? 'dark' : 'light');
 					});
 				}
 
 				// Mobile Menu Logic
 				const mobileBtn = document.querySelector('#mobile-menu-btn');
-				const navMenu = document.querySelector('.md:flex.items-center.space-x-8');
+				const navMenu = document.querySelector('.md\\:flex.items-center.space-x-8');
 				
 				if (mobileBtn && navMenu) {
 					mobileBtn.addEventListener('click', () => {
@@ -169,24 +173,30 @@ import { ViewTransitions } from 'astro:transitions';
 					});
 				}
 
-				// Progress Bar (only on long pages)
-				const progressBar = document.createElement('div');
-				progressBar.className = 'fixed top-0 left-0 h-1 bg-gradient-to-r from-brand-primary to-brand-secondary z-[100] transition-all duration-300 pointer-events-none w-0';
-				document.body.appendChild(progressBar);
+				// Progress Bar (Singleton)
+				let progressBar = document.querySelector('.page-progress-bar');
+				if (!progressBar) {
+					progressBar = document.createElement('div');
+					progressBar.className = 'page-progress-bar fixed top-0 left-0 h-1 bg-gradient-to-r from-brand-primary to-brand-secondary z-[100] transition-all duration-300 pointer-events-none w-0';
+					document.body.appendChild(progressBar);
+				}
 
-				window.addEventListener('scroll', () => {
+				const onScroll = () => {
 					const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
 					const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
 					const scrolled = (winScroll / height) * 100;
-					progressBar.style.width = scrolled + "%";
-					progressBar.style.opacity = scrolled > 1 ? "1" : "0";
-				});
+					(progressBar as HTMLElement).style.width = scrolled + "%";
+					(progressBar as HTMLElement).style.opacity = scrolled > 1 ? "1" : "0";
+				};
+				
+				window.removeEventListener('scroll', onScroll);
+				window.addEventListener('scroll', onScroll);
 				
 				// Newsletter AJAX submission
-				const form = document.querySelector('#newsletter-form');
+				const form = document.querySelector('#newsletter-form') as HTMLFormElement;
 				const successMsg = document.querySelector('#newsletter-success');
 
-				if (form) {
+				if (form && successMsg) {
 					form.addEventListener('submit', (e) => {
 						e.preventDefault();
 						const formData = new FormData(form);
@@ -194,7 +204,7 @@ import { ViewTransitions } from 'astro:transitions';
 						fetch('/', {
 							method: 'POST',
 							headers: { "Content-Type": "application/x-www-form-urlencoded" },
-							body: new URLSearchParams(formData).toString()
+							body: new URLSearchParams(formData as any).toString()
 						})
 						.then(() => {
 							form.style.opacity = '0';
@@ -210,22 +220,19 @@ import { ViewTransitions } from 'astro:transitions';
 				}
 
 				// Netlify Identity Login Redirect
-				if (window.netlifyIdentity) {
-					window.netlifyIdentity.on("init", user => {
+				if ((window as any).netlifyIdentity) {
+					(window as any).netlifyIdentity.on("init", (user: any) => {
 						if (!user) {
-							window.netlifyIdentity.on("login", () => {
+							(window as any).netlifyIdentity.on("login", () => {
 								document.location.href = "/admin/";
 							});
 						}
 					});
 				}
-			}
+			});
 
-			// Run on initial load
-			setupLayout();
-
-			// Run after every transition
-			document.addEventListener('astro:after-swap', setupLayout);
+			// Run theme update early to avoid white flash
+			updateTheme();
 		</script>
 	</body>
 </html>
